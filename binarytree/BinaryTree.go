@@ -3,8 +3,32 @@ package binarytree
 import "math"
 
 type BinNode struct {
+	Value int
 	Left  *BinNode
 	Right *BinNode
+}
+
+func (root *BinNode) Rebalance() *BinNode {
+	balance := root.GetBalance()
+	if math.Abs(float64(balance)) < 1 {
+		return root
+	}
+	var newRoot *BinNode
+	var toMove *BinNode
+	if balance > 0 {
+		// rotateRight
+		newRoot = root.Left
+		toMove = newRoot.Right
+		newRoot.Right = root
+		root.Left = toMove
+	} else {
+		// rotateLeft
+		newRoot = root.Right
+		toMove = newRoot.Left
+		newRoot.Left = root
+		root.Right = toMove
+	}
+	return newRoot
 }
 
 func (root *BinNode) GetBalance() int {
